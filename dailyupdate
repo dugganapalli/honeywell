@@ -4,4 +4,201 @@ DAILY UPDATE
 24/05/2021
 -----------
 linux basics:
+1)volume creation and lvm,pv,volume group
+2)mount points
+3)
+4)
+5)
+
 azure basics:
+1)resource group/subscription/agent cli connect
+2)
+3)
+4)
+5)
+
+ebs volume=  physical volume ,logical volume
+-------------
+create ebs volume and attach it
+lsblk
+fdisk -l
+    fdisk /dev/xvdf
+sudo file -s /dev/xvdf
+sudo mkfs -t ext4 /dev/xvdf
+sudo mkdir /newvolume
+sudo mount /dev/xvdf /newvolume/  800G
+umount /dev/xvdf
+
+Step 1: Back up the /etc/fstab file.
+sudo cp /etc/fstab /etc/fstab.bak
+
+Step 2: Open /etc/fstab file and make an entry in the following format.
+device_name mount_point file_system_type fs_mntops fs_freq fs_passno
+
+
+sudo mount -a
+
+fdisk -l
+fdisk -l
+
+
+ fdisk /dev/xvdf
+  566  partprobe /dev/xvdf
+  567  fdisk -l
+  568  pvcreate /dev/xvdf
+  569  pvcreate /dev/xvdf/
+  570  pvcreate /dev/xvdf
+  571  pvs
+  572  fdisk -l
+  573  pvcreate /dev/xvdf1 /dev/xvdf2 /dev/xvdf3
+  574  pvcreate  /dev/xvdf3
+  575  pvs
+  576  vgcreate  VGO /dev/xvdf1 /dev/xvdf2
+  577  VGS
+  578  vgs
+  579  c
+  580  vgs
+  581  lvcreate -n lv0 -L +30G VG0
+  582  lvcreate -n lv0 -L +30G VGo
+  583  lvcreate -n lv0 -L +30G VGO
+  584  lvdisplay /dev/VGO/lv0
+  585  mkfs ext4 /dev/VGO/lv0
+  586  mkfs.ext4 /dev/VGO/lv0
+pvcreate /dev/xvdf1 /dev/xvdf2 /dev/xvdf3
+pvcreate  /dev/xvdf3
+pvs
+vgcreate  VGO /dev/xvdf1 /dev/xvdf2
+vgs
+lvcreate -n lv0 -L +30G VG0
+
+
+
+azure
+=======  first we have to create resource group
+loadbalancer wiil end point as IP in azure(no dns endpoint)
+
+IAM===Azure Active Directory
+
+Access key  [client id 
+secret key  client secret       after servive principle (app registrations)we wii get
+            tenant id       
+            Subscrtion Id]
+
+
+
+instance==vms
+vpc====virtualnetworks
+clb====azure loadbalanncer
+alb====application gateway
+nlb
+        traffic manager----domain  service
+        front door------
+
+gateway
+
+Ecr-------ACR
+EKS-------AKS
+S3 (bucket)(objects)----storage acoounts(contaiers)(blob)
+AMI-------image defination
+EBS--------disks
+RDS-------databases(cosmos)
+pem------pem and username password
+R53-----DNs zones
+security groups -----Network security groups
+autoscaling-----virtual machine scalesets
+cloudwatch------azure monitor
+cloudtrail-----activity log
+sns---metric alert
+cloudfront-----cdn
+
+
+
+
+===============================
+Service	            Global/regional	      Recommended traffic
+
+Azure Front Door	      Global	            HTTP(S)
+Traffic Manager	        Global	            non-HTTP(S)
+Application Gateway	    Regional	          HTTP(S)
+Azure Load Balancer	      Global          	non-HTTP(S)
+
+
+
+azure load balancing
+-----------
+step(1):
+loadbalancer:
+1)health probe====port===health checkport
+2)frontend ip configuration====publiip create====like endpoint
+3)backend address pool=====targets====target group
+consists of virtual network and vms
+4)loadbalancing rule====security gropus(healthcheck)===security group
+consists of above 3 steps(health probe,backend sddresspool,fronend ip)
+  
+
+take load balancer  ip and Access-
+
+Terraform
+==========
+Access Key ID:  AKIAY6KW5DUZ2UIZYWGJ
+Secret Access Key:  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
+
+terraform lifecycle 
+=====================
+Terraform init : initializes the working directory which consists of all the configuration files
+--------------
+Terraform plan :  is used to create an execution plan to reach a desired state of the infrastructure. Changes in the configuration files are done in order to achieve the desired state.
+--------------
+Terraform apply:  then makes the changes in the infrastructure as defined in the plan, and the infrastructure comes to the desired state.
+--------------
+Terraform destroy: is used to delete all the old infrastructure resources, which are marked tainted after the apply phase
+------------- 
+
+task1:
+------
+provider "aws" {
+access_key = "AKIAY6KW5DUZ2UIZYWGJ"
+secret_key = "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"
+region = "us-east-1"
+}
+
+resource "aws_instance" "terraform_demo" {
+ami = "ami-0d5eff06f840b45e9"
+instance_type = "t2.micro"
+}
+
+terraform init
+terraform plan
+terraform apply
+terraform destroy
+
+
+terraform provider
+-----------------
+
+provider "aws" {
+  version = "~> 3.0"
+  region  = "us-east-1"
+}
+
+resource "aws_instance" "app_instance" {
+ami = "ami-0d5eff06f840b45e9"
+instance_type = "t2.micro"
+}
+
+whenever you are creating ami required deatails
+------------------------------------------------
+ami=
+instance type=
+
+provider "aws" {
+  version = "~> 3.0"
+  region  = "us-east-1"
+}
+resource "aws_instance" "app_instance" {
+  ami = "ami-0d5eff06f840b45e9"
+  instance_type = "t2.micro"
+}
+  tags = {
+    Name = "HelloWorld"
+  }
